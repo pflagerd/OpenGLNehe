@@ -1,9 +1,6 @@
 //
 // This code was created by Jeff Molofee '99
-//
-// If you've found this code useful, please let me know.
-//
-// Visit me at www.demonews.com/hosted/nehe
+// and updated to windows 2010 by Daniel P Pflager.
 //
 
 #include <windows.h>	// Header File For Windows
@@ -26,7 +23,7 @@ GLvoid InitGL(GLsizei Width, GLsizei Height)	// This Will Be Called Right After 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();							// Reset The Projection Matrix
 
-	gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);	// Calculate The Aspect Ratio Of The Window
+	gluPerspective(45.0f, (GLfloat)Width/(GLfloat)Height, 0.1f, 100.0f);	// Calculate The Aspect Ratio Of The Window
 
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -41,7 +38,7 @@ GLvoid ReSizeGLScene(GLsizei Width, GLsizei Height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);
+	gluPerspective(45.0f, (GLfloat)Width/(GLfloat)Height, 0.1f, 100.0f);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -93,7 +90,7 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,
 				break;						// Prevents The Rest Of The Code From Running
 			}
 
-			if(!SetPixelFormat(hDC,PixelFormat,&pfd))
+			if (!SetPixelFormat(hDC, PixelFormat, &pfd))
 			{
 				MessageBox(0, L"Can't Set The PixelFormat.", L"Error", MB_OK | MB_ICONERROR);
 				PostQuitMessage(0);
@@ -101,14 +98,14 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,
 			}
 
 			hRC = wglCreateContext(hDC);
-			if(!hRC)
+			if (!hRC)
 			{
 				MessageBox(0, L"Can't Create A GL Rendering Context.", L"Error", MB_OK | MB_ICONERROR);
 				PostQuitMessage(0);
 				break;
 			}
 
-			if(!wglMakeCurrent(hDC, hRC))
+			if (!wglMakeCurrent(hDC, hRC))
 			{
 				MessageBox(0, L"Can't activate GLRC.", L"Error", MB_OK | MB_ICONERROR);
 				PostQuitMessage(0);
@@ -139,13 +136,13 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,
 			break;
 
 		case WM_SIZE:
-			ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));
+			ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));
 			break;
 
 		default:
-			return (DefWindowProc(hWnd, message, wParam, lParam));
+			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-return (0);
+	return 0;
 }
 
 int WINAPI WinMain(	HINSTANCE	hInstance, 
@@ -168,7 +165,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= L"OpenGL WinClass";
 
-	if(!RegisterClass(&wc))
+	if (!RegisterClass(&wc))
 	{
 		MessageBox(0, L"Failed To Register The Window Class.", L"Error", MB_OK | MB_ICONERROR);
 		return FALSE;
@@ -190,7 +187,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,
 	hInstance,
 	NULL);
 
-	if(!hWnd)
+	if (!hWnd)
 	{
 		MessageBox(0, L"Window Creation Error.", L"Error", MB_OK | MB_ICONERROR);
 		return FALSE;
@@ -210,7 +207,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,
 	SetFocus(hWnd);
 	wglMakeCurrent(hDC,hRC);
 
-	while (1)
+	while (TRUE)
 	{
 		// Process All Messages
 		while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
@@ -228,6 +225,9 @@ int WINAPI WinMain(	HINSTANCE	hInstance,
 
 		DrawGLScene();
 		SwapBuffers(hDC);
-		if (keys[VK_ESCAPE]) SendMessage(hWnd,WM_CLOSE,0,0);
+		if (keys[VK_ESCAPE])
+		{
+			SendMessage(hWnd,WM_CLOSE,0,0);
+		}
 	}
 }
