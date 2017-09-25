@@ -104,17 +104,17 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
  *	bits			- Number Of Bits To Use For Color (8/16/24/32)			*
  *	fullscreenflag	- Use Fullscreen Mode (TRUE) Or Windowed Mode (FALSE)	*/
  
-BOOL CreateGLWindow(const TCHAR* title, int width, int height, int bits, bool fullscreenflag)
+BOOL CreateGLWindow(const wchar_t* title, int width, int height, int bits, bool fullscreenflag)
 {
 	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
 	WNDCLASS	wc;						// Windows Class Structure
 	DWORD		dwExStyle;				// Window Extended Style
 	DWORD		dwStyle;				// Window Style
 	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
-	WindowRect.left=(long)0;			// Set Left Value To 0
-	WindowRect.right=(long)width;		// Set Right Value To Requested Width
-	WindowRect.top=(long)0;				// Set Top Value To 0
-	WindowRect.bottom=(long)height;		// Set Bottom Value To Requested Height
+	WindowRect.left =(long)0;			// Set Left Value To 0
+	WindowRect.right =(long)width;		// Set Right Value To Requested Width
+	WindowRect.top =(long)0;			// Set Top Value To 0
+	WindowRect.bottom =(long)height;	// Set Bottom Value To Requested Height
 
 	fullscreen=fullscreenflag;			// Set The Global Fullscreen Flag
 
@@ -139,8 +139,8 @@ BOOL CreateGLWindow(const TCHAR* title, int width, int height, int bits, bool fu
 	if (fullscreen)												// Attempt Fullscreen Mode?
 	{
 		DEVMODE dmScreenSettings;								// Device Mode
-		memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
-		dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);		// Size Of The Devmode Structure
 		dmScreenSettings.dmPelsWidth	= width;				// Selected Screen Width
 		dmScreenSettings.dmPelsHeight	= height;				// Selected Screen Height
 		dmScreenSettings.dmBitsPerPel	= bits;					// Selected Bits Per Pixel
@@ -152,7 +152,7 @@ BOOL CreateGLWindow(const TCHAR* title, int width, int height, int bits, bool fu
 			// If The Mode Fails, Offer Two Options.  Quit Or Use Windowed Mode.
 			if (MessageBox(NULL, L"The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", L"NeHe GL", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
 			{
-				fullscreen=FALSE;		// Windowed Mode Selected.  Fullscreen = FALSE
+				fullscreen = FALSE;		// Windowed Mode Selected.  Fullscreen = FALSE
 			}
 			else
 			{
