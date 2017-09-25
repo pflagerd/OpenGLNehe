@@ -40,8 +40,6 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	GLint shadeModel;
-	glGetIntegerv(GL_SHADE_MODEL, &shadeModel);
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
@@ -221,7 +219,7 @@ BOOL CreateGLWindow(const TCHAR* title, int width, int height, int bits, bool fu
 		0, 0, 0										// Layer Masks Ignored
 	};
 	
-	if (!(hDC = GetDC(hWnd)))							// Did We Get A Device Context?
+	if (!(hDC = GetDC(hWnd)))						// Did We Get A Device Context?
 	{
 		KillGLWindow();								// Reset The Display
 		MessageBox(NULL, L"Can't Create A GL Device Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
