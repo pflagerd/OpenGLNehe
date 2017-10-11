@@ -1,5 +1,6 @@
 /*
  *		This Code Was Created By Jeff Molofee 2000
+ *
  *		It was later updated for Visual Studio 2010 SP1 by Daniel P. Pflager
  *
  */

@@ -1,9 +1,8 @@
 /*
  *		This Code Was Created By Jeff Molofee 2000
- *		A HUGE Thanks To Fredric Echols For Cleaning Up
- *		And Optimizing The Base Code, Making It More Flexible!
- *		If You've Found This Code Useful, Please Let Me Know.
- *		Visit My Site At nehe.gamedev.net
+ *
+ *		It was later updated for Visual Studio 2010 SP1 by Daniel P. Pflager
+ *
  */
 
 #include <windows.h>		// Header File For Windows
