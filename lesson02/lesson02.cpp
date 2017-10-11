@@ -9,7 +9,6 @@
 #include <windows.h>		// Header File For Windows
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
-#include <gl\glaux.h>		// Header File For The Glaux Library
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -84,31 +83,31 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 	{
 		if (!wglMakeCurrent(NULL,NULL))					// Are We Able To Release The DC And RC Contexts?
 		{
-			MessageBox(NULL,"Release Of DC And RC Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
+			MessageBox(NULL, L"Release Of DC And RC Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		}
 
 		if (!wglDeleteContext(hRC))						// Are We Able To Delete The RC?
 		{
-			MessageBox(NULL,"Release Rendering Context Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
+			MessageBox(NULL, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		}
 		hRC=NULL;										// Set RC To NULL
 	}
 
 	if (hDC && !ReleaseDC(hWnd,hDC))					// Are We Able To Release The DC
 	{
-		MessageBox(NULL,"Release Device Context Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
+		MessageBox(NULL, L"Release Device Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hDC=NULL;										// Set DC To NULL
 	}
 
 	if (hWnd && !DestroyWindow(hWnd))					// Are We Able To Destroy The Window?
 	{
-		MessageBox(NULL,"Could Not Release hWnd.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
+		MessageBox(NULL, L"Could Not Release hWnd.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hWnd=NULL;										// Set hWnd To NULL
 	}
 
-	if (!UnregisterClass("OpenGL",hInstance))			// Are We Able To Unregister Class
+	if (!UnregisterClass(L"OpenGL",hInstance))			// Are We Able To Unregister Class
 	{
-		MessageBox(NULL,"Could Not Unregister Class.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
+		MessageBox(NULL, L"Could Not Unregister Class.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hInstance=NULL;									// Set hInstance To NULL
 	}
 }
@@ -120,7 +119,7 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
  *	bits			- Number Of Bits To Use For Color (8/16/24/32)			*
  *	fullscreenflag	- Use Fullscreen Mode (TRUE) Or Windowed Mode (FALSE)	*/
  
-BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscreenflag)
+BOOL CreateGLWindow(wchar_t* title, int width, int height, int bits, bool fullscreenflag)
 {
 	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
 	WNDCLASS	wc;						// Windows Class Structure
@@ -144,11 +143,11 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
 	wc.hbrBackground	= NULL;									// No Background Required For GL
 	wc.lpszMenuName		= NULL;									// We Don't Want A Menu
-	wc.lpszClassName	= "OpenGL";								// Set The Class Name
+	wc.lpszClassName	= L"OpenGL";							// Set The Class Name
 
 	if (!RegisterClass(&wc))									// Attempt To Register The Window Class
 	{
-		MessageBox(NULL,"Failed To Register The Window Class.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Failed To Register The Window Class.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;											// Return FALSE
 	}
 	
@@ -166,14 +165,14 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL)
 		{
 			// If The Mode Fails, Offer Two Options.  Quit Or Use Windowed Mode.
-			if (MessageBox(NULL,"The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?","NeHe GL",MB_YESNO|MB_ICONEXCLAMATION)==IDYES)
+			if (MessageBox(NULL, L"The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", L"NeHe GL", MB_YESNO | MB_ICONEXCLAMATION)==IDYES)
 			{
 				fullscreen=FALSE;		// Windowed Mode Selected.  Fullscreen = FALSE
 			}
 			else
 			{
 				// Pop Up A Message Box Letting User Know The Program Is Closing.
-				MessageBox(NULL,"Program Will Now Close.","ERROR",MB_OK|MB_ICONSTOP);
+				MessageBox(NULL, L"Program Will Now Close.", L"ERROR", MB_OK | MB_ICONSTOP);
 				return FALSE;									// Return FALSE
 			}
 		}
@@ -195,7 +194,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 
 	// Create The Window
 	if (!(hWnd=CreateWindowEx(	dwExStyle,							// Extended Style For The Window
-								"OpenGL",							// Class Name
+								L"OpenGL",							// Class Name
 								title,								// Window Title
 								dwStyle |							// Defined Window Style
 								WS_CLIPSIBLINGS |					// Required Window Style
@@ -209,7 +208,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 								NULL)))								// Dont Pass Anything To WM_CREATE
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Window Creation Error.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Window Creation Error.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
@@ -238,39 +237,39 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	if (!(hDC=GetDC(hWnd)))							// Did We Get A Device Context?
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Create A GL Device Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Can't Create A GL Device Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
 	if (!(PixelFormat=ChoosePixelFormat(hDC,&pfd)))	// Did Windows Find A Matching Pixel Format?
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Find A Suitable PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Can't Find A Suitable PixelFormat.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
-	if(!SetPixelFormat(hDC,PixelFormat,&pfd))		// Are We Able To Set The Pixel Format?
+	if(!SetPixelFormat(hDC, PixelFormat, &pfd))		// Are We Able To Set The Pixel Format?
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Set The PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Can't Set The PixelFormat.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
 	if (!(hRC=wglCreateContext(hDC)))				// Are We Able To Get A Rendering Context?
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Create A GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Can't Create A GL Rendering Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
-	if(!wglMakeCurrent(hDC,hRC))					// Try To Activate The Rendering Context
+	if(!wglMakeCurrent(hDC, hRC))					// Try To Activate The Rendering Context
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Activate The GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Can't Activate The GL Rendering Context.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
-	ShowWindow(hWnd,SW_SHOW);						// Show The Window
+	ShowWindow(hWnd, SW_SHOW);						// Show The Window
 	SetForegroundWindow(hWnd);						// Slightly Higher Priority
 	SetFocus(hWnd);									// Sets Keyboard Focus To The Window
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
@@ -278,7 +277,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	if (!InitGL())									// Initialize Our Newly Created GL Window
 	{
 		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Initialization Failed.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+		MessageBox(NULL, L"Initialization Failed.", L"ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;								// Return FALSE
 	}
 
@@ -337,13 +336,13 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 
 		case WM_SIZE:								// Resize The OpenGL Window
 		{
-			ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));  // LoWord=Width, HiWord=Height
+			ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));  // LoWord=Width, HiWord=Height
 			return 0;								// Jump Back
 		}
 	}
 
 	// Pass All Unhandled Messages To DefWindowProc
-	return DefWindowProc(hWnd,uMsg,wParam,lParam);
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
@@ -355,13 +354,13 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	BOOL	done=FALSE;								// Bool Variable To Exit Loop
 
 	// Ask The User Which Screen Mode They Prefer
-	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
+	if (MessageBox(NULL, L"Would You Like To Run In Fullscreen Mode?", L"Start FullScreen?", MB_YESNO | MB_ICONQUESTION)==IDNO)
 	{
 		fullscreen=FALSE;							// Windowed Mode
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("NeHe's First Polygon Tutorial",640,480,16,fullscreen))
+	if (!CreateGLWindow(L"NeHe's First Polygon Tutorial", 640, 480, 16, fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -398,7 +397,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				KillGLWindow();						// Kill Our Current Window
 				fullscreen=!fullscreen;				// Toggle Fullscreen / Windowed Mode
 				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's First Polygon Tutorial",640,480,16,fullscreen))
+				if (!CreateGLWindow(L"NeHe's First Polygon Tutorial", 640, 480, 16, fullscreen))
 				{
 					return 0;						// Quit If Window Was Not Created
 				}
