@@ -57,30 +57,6 @@ bool NeHeLoadBitmap(LPTSTR szFileName, GLuint &texid)	// Creates Texture From A 
 	return TRUE;	// Loading Was Successful
 }
 
-int LoadGLTextures()									// Load Bitmaps And Convert To Textures
-{
-	int Status=FALSE;									// Status Indicator
-
-	AUX_RGBImageRec *TextureImage[1];					// Create Storage Space For The Texture
-
-	memset(TextureImage, 0, sizeof(void *)*1);           	// Set The Pointer To NULL
-
-	// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
-	Status = NeHeLoadBitmap(L"Data/NeHe.bmp",texture[0]);
-
-	if (TextureImage[0])									// If Texture Exists
-	{
-		if (TextureImage[0]->data)							// If Texture Image Exists
-		{
-			free(TextureImage[0]->data);					// Free The Texture Image Memory
-		}
-
-		free(TextureImage[0]);								// Free The Image Structure
-	}
-
-	return Status;										// Return The Status
-}
-
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
 	if (height==0)										// Prevent A Divide By Zero By
@@ -102,7 +78,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	if (!LoadGLTextures())								// Jump To Texture Loading Routine ( NEW )
+	if (!NeHeLoadBitmap(L"Data/NeHe.bmp",texture[0]))	// Jump To Texture Loading Routine ( NEW )
 	{
 		return FALSE;									// If Texture Didn't Load Return FALSE
 	}
